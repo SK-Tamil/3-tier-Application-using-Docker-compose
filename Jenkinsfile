@@ -51,6 +51,20 @@ pipeline {
                 '''
             }
         }
+
+        stage('Tag Docker Images') {
+    steps {
+        sh '''
+            docker tag \
+                employee-frontend:latest \
+                ${ECR_REGISTRY}/${FRONTEND_REPO}:${BUILD_NUMBER}
+
+            docker tag \
+                employee-backend:latest \
+                ${ECR_REGISTRY}/${BACKEND_REPO}:${BUILD_NUMBER}
+        '''
+    }
+}
     }
 
     post {
