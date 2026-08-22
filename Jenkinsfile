@@ -2,10 +2,13 @@ pipeline {
     agent any
 
     environment {
-        AWS_REGION = 'ap-southeast-1'
+        AWS_REGION     = 'us-east-1'
+        AWS_ACCOUNT_ID = '165328639795'
 
-        ECR_FRONTEND = 'employee-frontend'
-        ECR_BACKEND  = 'employee-backend'
+        ECR_REGISTRY   = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
+
+        FRONTEND_REPO  = 'employee-frontend'
+        BACKEND_REPO   = 'employee-backend'
     }
 
     stages {
@@ -14,18 +17,6 @@ pipeline {
             steps {
                 echo 'Checking out dev branch...'
                 checkout scm
-            }
-        }
-
-        stage('Verify') {
-            steps {
-                sh '''
-                    echo "Current branch:"
-                    git branch --show-current
-
-                    echo "Project files:"
-                    ls -la
-                '''
             }
         }
 
@@ -48,6 +39,18 @@ pipeline {
                 '''
             }
         }
+
+        stage('Login to AWS ECR') {
+            steps {
+                sh '''
+                    aws ecr get-login-password \
+                        --region ${AWS_REGION} | \
+                    docker login \
+                        --username AWS \
+                        --password-stdin ${ECR_REGISTRY}
+                '''
+            }
+        }
     }
 
     post {
@@ -60,4 +63,3 @@ pipeline {
         }
     }
 }
-
