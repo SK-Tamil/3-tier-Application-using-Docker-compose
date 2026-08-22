@@ -64,7 +64,23 @@ pipeline {
                 ${ECR_REGISTRY}/${BACKEND_REPO}:${BUILD_NUMBER}
         '''
     }
+}     
+
+       stage('Push Images to ECR') {
+    steps {
+        sh '''
+            echo "Pushing frontend image..."
+            docker push \
+                ${ECR_REGISTRY}/${FRONTEND_REPO}:${BUILD_NUMBER}
+
+            echo "Pushing backend image..."
+            docker push \
+                ${ECR_REGISTRY}/${BACKEND_REPO}:${BUILD_NUMBER}
+        '''
+    }
 }
+
+
     }
 
     post {
