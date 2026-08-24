@@ -305,7 +305,7 @@ pipeline {
     success {
         echo 'Pipeline succeeded. Sending notification email...'
         emailext (
-            to: 'stamilselvansk@gmail.com', // Replace with recipient email address
+            to: 'stamilselvansk@gmail.com,anandhaneee293@gmail.com', // Replace with recipient email address
             subject: "SUCCESSFUL: Job '${env.JOB_NAME}' [Build #${env.BUILD_NUMBER}]",
             mimeType: 'text/html',
             body: """
