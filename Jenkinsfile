@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         
-        AWS_REGION     = 'us-east-1'
+        AWS_REGION     = 'us-east'
         AWS_ACCOUNT_ID = '165328639795'
 
         ECR_REGISTRY = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
