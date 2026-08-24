@@ -208,25 +208,7 @@ pipeline {
             }
         }
 
-        // ============================================================
-        // 8. WAIT FOR BACKEND
-        // ============================================================
-        stage('Wait for Backend Deployment') {
-            steps {
-                sh '''
-                    set -e
-
-                    echo "Waiting for backend ECS service to become stable..."
-
-                    aws ecs wait services-stable \
-                        --cluster ${ECS_CLUSTER} \
-                        --services ${BACKEND_SERVICE} \
-                        --region ${AWS_REGION}
-
-                    echo "Backend deployment completed successfully."
-                '''
-            }
-        }
+     
 
         // ============================================================
         // 9. DEPLOY FRONTEND
@@ -313,25 +295,7 @@ pipeline {
             }
         }
 
-        // ============================================================
-        // 10. WAIT FOR FRONTEND
-        // ============================================================
-        stage('Wait for Frontend Deployment') {
-            steps {
-                sh '''
-                    set -e
-
-                    echo "Waiting for frontend ECS service to become stable..."
-
-                    aws ecs wait services-stable \
-                        --cluster ${ECS_CLUSTER} \
-                        --services ${FRONTEND_SERVICE} \
-                        --region ${AWS_REGION}
-
-                    echo "Frontend deployment completed successfully."
-                '''
-            }
-        }
+    
     }
 
     // ================================================================

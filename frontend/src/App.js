@@ -199,7 +199,7 @@ function App() {
               </svg>
             </div>
             <div>
-              <h1 className="app-title">Employee Management System</h1>
+              <h1 className="app-title">Management System</h1>
               <p className="app-subtitle">
                 Manage your organization's workforce records in one place
               </p>
