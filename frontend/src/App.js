@@ -39,13 +39,11 @@ function App() {
       });
 
       if (response.ok) {
-        alert("Employee Added Successfully");
+        alert("Record Added Successfully");
         loadEmployees();
-        setName("");
-        setDepartment("");
-        setEmail("");
+        clearForm();
       } else {
-        alert("Failed to Add Employee");
+        alert("Failed to Add Record");
       }
     } catch (error) {
       console.error(error);
@@ -55,7 +53,7 @@ function App() {
 
   const updateEmployee = async () => {
     if (!id || !name || !department || !email) {
-      alert("Please fill all fields");
+      alert("Please select a record or enter an ID first");
       return;
     }
 
@@ -67,16 +65,13 @@ function App() {
       });
 
       if (response.ok) {
-        alert("Employee Updated Successfully");
+        alert("Record Updated Successfully");
       } else {
-        alert("Employee Not Found");
+        alert("Record Not Found");
       }
 
       loadEmployees();
-      setId("");
-      setName("");
-      setDepartment("");
-      setEmail("");
+      clearForm();
     } catch (error) {
       console.error(error);
       alert("Server Error");
@@ -85,11 +80,11 @@ function App() {
 
   const deleteEmployee = async () => {
     if (!id) {
-      alert("Enter Employee ID");
+      alert("Enter or select an ID to delete");
       return;
     }
 
-    if (!window.confirm("Are you sure you want to delete this employee?")) {
+    if (!window.confirm("Are you sure you want to delete this record?")) {
       return;
     }
 
@@ -99,16 +94,13 @@ function App() {
       });
 
       if (response.ok) {
-        alert("Employee Deleted Successfully");
+        alert("Record Deleted Successfully");
       } else {
-        alert("Employee Not Found");
+        alert("Record Not Found");
       }
 
       loadEmployees();
-      setId("");
-      setName("");
-      setDepartment("");
-      setEmail("");
+      clearForm();
     } catch (error) {
       console.error(error);
       alert("Server Error");
@@ -124,7 +116,7 @@ function App() {
 
   const departmentCount = [
     ...new Set(employees.map((emp) => emp.department)),
-  ].length;
+  ].filter(Boolean).length;
 
   const getInitials = (fullName) => {
     if (!fullName) return "?";
@@ -153,14 +145,14 @@ function App() {
 
   return (
     <div className="dashboard-container">
-      {/* Top Navigation Bar */}
+      {/* Premium Dark Header Section */}
       <header className="top-nav">
         <div className="nav-content">
           <div className="brand">
-            <div className="brand-icon">EM</div>
+            <div className="brand-icon">SK</div>
             <div className="brand-text">
-              <h1>Employee Manager</h1>
-              <p>Workforce Administration</p>
+              <h1>Workforce Command Center</h1>
+              <p className="developer-tag">Developed by SK@Tamil</p>
             </div>
           </div>
           <div className="status-badge">
@@ -170,38 +162,38 @@ function App() {
         </div>
       </header>
 
-      {/* Main Content Area */}
+      {/* Main Dashboard Wrapper */}
       <main className="main-wrapper">
-        {/* Metric Cards */}
+        {/* Metric Cards Section */}
         <section className="stats-row">
-          <div className="stat-card">
+          <div className="stat-card blue-theme">
             <div className="stat-info">
-              <p>Total Employees</p>
+              <p>Total Personnel</p>
               <h2>{employees.length}</h2>
             </div>
             <div className="stat-icon-wrapper blue">👥</div>
           </div>
 
-          <div className="stat-card">
+          <div className="stat-card purple-theme">
             <div className="stat-info">
-              <p>Departments</p>
+              <p>Active Departments</p>
               <h2>{departmentCount}</h2>
             </div>
             <div className="stat-icon-wrapper purple">🏢</div>
           </div>
         </section>
 
-        {/* Form and Table Section */}
+        {/* Content Layout Grid */}
         <div className="content-grid">
-          {/* Form Side */}
+          {/* Form Side Panel */}
           <div className="panel">
             <div className="panel-header">
-              <h3 className="panel-title">Employee Details</h3>
+              <h3 className="panel-title">Personnel Controls</h3>
             </div>
             <div className="panel-body">
               <form onSubmit={(e) => e.preventDefault()}>
                 <div className="form-group">
-                  <label className="form-label">Employee ID (For Edit/Delete)</label>
+                  <label className="form-label">ID (Select row to fill)</label>
                   <input
                     type="number"
                     value={id}
@@ -217,7 +209,7 @@ function App() {
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="e.g. John Doe"
+                    placeholder="e.g. Alex Morgan"
                     className="form-input"
                   />
                 </div>
@@ -239,14 +231,14 @@ function App() {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="e.g. john@company.com"
+                    placeholder="e.g. alex@company.com"
                     className="form-input"
                   />
                 </div>
 
                 <div className="button-grid">
                   <button type="button" onClick={addEmployee} className="btn btn-primary">
-                    Add
+                    Add Record
                   </button>
                   <button type="button" onClick={updateEmployee} className="btn btn-secondary">
                     Update
@@ -262,15 +254,15 @@ function App() {
             </div>
           </div>
 
-          {/* Table Side */}
+          {/* Table Side Panel */}
           <div className="panel">
             <div className="panel-header">
-              <h3 className="panel-title">Records ({filteredEmployees.length})</h3>
+              <h3 className="panel-title">Directory Records ({filteredEmployees.length})</h3>
               <input
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search..."
+                placeholder="Search personnel..."
                 className="form-input search-box"
               />
             </div>
@@ -279,7 +271,7 @@ function App() {
                 <thead>
                   <tr>
                     <th>ID</th>
-                    <th>Employee</th>
+                    <th>Personnel</th>
                     <th>Department</th>
                     <th>Email</th>
                   </tr>
@@ -304,7 +296,7 @@ function App() {
                   ) : (
                     <tr>
                       <td colSpan="4" className="empty-state">
-                        No employee records found.
+                        No personnel records found.
                       </td>
                     </tr>
                   )}
@@ -314,6 +306,11 @@ function App() {
           </div>
         </div>
       </main>
+
+      {/* Sleek Footer */}
+      <footer className="footer-bar">
+        <p>Workforce Command Center • Developed by <span>SK@Tamil</span></p>
+      </footer>
     </div>
   );
 }

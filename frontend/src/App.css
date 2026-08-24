@@ -1,6 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
-/* --- Reset & Global Theme --- */
+/* --- Reset & Base Theme --- */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -21,12 +21,37 @@ body {
   flex-direction: column;
 }
 
-/* --- Top Navigation Header --- */
+/* --- Animations --- */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulseGlow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(34, 197, 94, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+  }
+}
+
+/* --- Modern Sleek Header Bar --- */
 .top-nav {
-  background-color: #ffffff;
-  border-bottom: 1px solid #e2e8f0;
-  padding: 1rem 2rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  background: #090d16;
+  border-bottom: 2px solid #1e293b;
+  padding: 1.1rem 2rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  position: relative;
 }
 
 .nav-content {
@@ -40,41 +65,56 @@ body {
 .brand {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 1rem;
 }
 
+/* Developer Logo Icon */
 .brand-icon {
-  background: #2563eb;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
   color: #ffffff;
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
+  border: 1px solid #60a5fa;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 800;
-  font-size: 1.2rem;
+  font-weight: 900;
+  font-size: 1.1rem;
+  letter-spacing: -0.5px;
+  box-shadow: 0 0 16px rgba(37, 99, 235, 0.4);
+  transition: transform 0.3s ease;
+}
+
+.brand-icon:hover {
+  transform: scale(1.08) rotate(-4deg);
 }
 
 .brand-text h1 {
-  font-size: 1.125rem;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #f8fafc;
+  letter-spacing: -0.02em;
+}
+
+/* Developed by SK@Tamil Tag */
+.developer-tag {
+  font-size: 0.78rem;
+  color: #38bdf8;
   font-weight: 700;
-  color: #0f172a;
+  letter-spacing: 0.04em;
+  margin-top: 0.1rem;
 }
 
-.brand-text p {
-  font-size: 0.75rem;
-  color: #64748b;
-}
-
+/* Status Indicator */
 .status-badge {
-  background-color: #dcfce7;
-  color: #166534;
-  border: 1px solid #bbf7d0;
-  padding: 0.35rem 0.85rem;
+  background: rgba(34, 197, 94, 0.12);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  padding: 0.4rem 0.9rem;
   border-radius: 9999px;
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 700;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -85,33 +125,120 @@ body {
   height: 8px;
   background-color: #22c55e;
   border-radius: 50%;
+  animation: pulseGlow 2s infinite;
 }
 
-/* --- Main Dashboard Area --- */
+/* --- Main Dashboard Wrapper --- */
 .main-wrapper {
   max-width: 1280px;
   margin: 2rem auto;
   padding: 0 1.5rem;
   width: 100%;
+  flex: 1;
 }
 
-/* --- Stat Summary Cards --- */
+/* --- Stat Cards Section --- */
 .stats-row {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.5rem;
   margin-bottom: 2rem;
+  animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .stat-card {
-  background-color: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
+  border-radius: 16px;
   padding: 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+}
+
+/* Blue Card: Total Personnel */
+.stat-card.blue-theme {
+  background: linear-gradient(135deg, #ffffff 0%, #eff6ff 100%);
+  border: 1px solid #bfdbfe;
+  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.08);
+}
+
+.stat-card.blue-theme::before {
+  background: linear-gradient(90deg, #2563eb, #38bdf8);
+}
+
+.stat-card.blue-theme:hover {
+  transform: translateY(-6px);
+  background: linear-gradient(135deg, #ffffff 0%, #dbeafe 100%);
+  border-color: #60a5fa;
+  box-shadow: 0 12px 25px rgba(37, 99, 235, 0.2);
+}
+
+.stat-card.blue-theme .stat-info p {
+  color: #1d4ed8;
+}
+
+.stat-card.blue-theme .stat-info h2 {
+  color: #1e3a8a;
+}
+
+.stat-icon-wrapper.blue {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  color: #ffffff;
+  box-shadow: 0 6px 14px rgba(37, 99, 235, 0.35);
+  transition: transform 0.3s ease;
+}
+
+.stat-card.blue-theme:hover .stat-icon-wrapper.blue {
+  transform: scale(1.12) rotate(-5deg);
+}
+
+/* Purple Card: Active Departments */
+.stat-card.purple-theme {
+  background: linear-gradient(135deg, #ffffff 0%, #faf5ff 100%);
+  border: 1px solid #e9d5ff;
+  box-shadow: 0 4px 15px rgba(147, 51, 234, 0.08);
+}
+
+.stat-card.purple-theme::before {
+  background: linear-gradient(90deg, #9333ea, #c026d3);
+}
+
+.stat-card.purple-theme:hover {
+  transform: translateY(-6px);
+  background: linear-gradient(135deg, #ffffff 0%, #f3e8ff 100%);
+  border-color: #c084fc;
+  box-shadow: 0 12px 25px rgba(147, 51, 234, 0.2);
+}
+
+.stat-card.purple-theme .stat-info p {
+  color: #7e22ce;
+}
+
+.stat-card.purple-theme .stat-info h2 {
+  color: #4c1d95;
+}
+
+.stat-icon-wrapper.purple {
+  background: linear-gradient(135deg, #9333ea 0%, #7e22ce 100%);
+  color: #ffffff;
+  box-shadow: 0 6px 14px rgba(147, 51, 234, 0.35);
+  transition: transform 0.3s ease;
+}
+
+.stat-card.purple-theme:hover .stat-icon-wrapper.purple {
+  transform: scale(1.12) rotate(5deg);
 }
 
 .stat-info p {
@@ -119,42 +246,31 @@ body {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #64748b;
 }
 
 .stat-info h2 {
-  font-size: 2rem;
+  font-size: 2.25rem;
   font-weight: 800;
-  color: #0f172a;
   margin-top: 0.25rem;
 }
 
 .stat-icon-wrapper {
-  width: 52px;
-  height: 52px;
-  border-radius: 10px;
+  width: 54px;
+  height: 54px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
+  font-size: 1.6rem;
 }
 
-.stat-icon-wrapper.blue {
-  background-color: #eff6ff;
-  color: #2563eb;
-}
-
-.stat-icon-wrapper.purple {
-  background-color: #faf5ff;
-  color: #9333ea;
-}
-
-/* --- Grid Layout (Form + Table) --- */
+/* --- Content Grid Layout --- */
 .content-grid {
   display: grid;
   grid-template-columns: 360px 1fr;
   gap: 1.5rem;
   align-items: start;
+  animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @media (max-width: 900px) {
@@ -163,22 +279,23 @@ body {
   }
 }
 
-/* --- Card Panel Styling --- */
+/* --- Panels & Form Controls --- */
 .panel {
   background-color: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  border: 1px solid #cbd5e1;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   overflow: hidden;
 }
 
 .panel-header {
   padding: 1.25rem 1.5rem;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid #f1f5f9;
   background-color: #ffffff;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 1rem;
 }
 
 .panel-title {
@@ -191,7 +308,6 @@ body {
   padding: 1.5rem;
 }
 
-/* --- Form Elements --- */
 .form-group {
   margin-bottom: 1.25rem;
 }
@@ -212,7 +328,7 @@ body {
   border-radius: 8px;
   font-size: 0.875rem;
   color: #0f172a;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  transition: all 0.15s ease;
 }
 
 .form-input:focus {
@@ -226,7 +342,7 @@ body {
   color: #94a3b8;
 }
 
-/* --- Action Buttons --- */
+/* Buttons */
 .button-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -241,15 +357,20 @@ body {
   border-radius: 8px;
   border: 1px solid transparent;
   cursor: pointer;
-  transition: background-color 0.15s ease, border-color 0.15s ease;
+  transition: all 0.2s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
 }
 
+.btn:active {
+  transform: scale(0.97);
+}
+
 .btn-primary {
   background-color: #2563eb;
   color: #ffffff;
+  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
 }
 
 .btn-primary:hover {
@@ -285,7 +406,7 @@ body {
   background-color: #f8fafc;
 }
 
-/* --- Table Styles --- */
+/* --- Directory Table --- */
 .search-box {
   width: 240px;
 }
@@ -324,10 +445,13 @@ body {
 }
 
 .data-table tbody tr:hover {
-  background-color: #f8fafc;
+  background-color: #f1f5f9;
 }
 
-/* Table Specific Cell Displays */
+.data-table tbody tr:hover td {
+  color: #0f172a;
+}
+
 .emp-cell {
   display: flex;
   align-items: center;
@@ -337,7 +461,7 @@ body {
 .avatar {
   width: 36px;
   height: 36px;
-  background-color: #e0e7ff;
+  background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
   color: #3730a3;
   border-radius: 50%;
   display: flex;
@@ -353,13 +477,13 @@ body {
 }
 
 .dept-pill {
-  background-color: #f1f5f9;
-  color: #334155;
-  border: 1px solid #e2e8f0;
+  background-color: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
   padding: 0.25rem 0.625rem;
   border-radius: 6px;
   font-size: 0.75rem;
-  font-weight: 500;
+  font-weight: 600;
   display: inline-block;
 }
 
@@ -367,4 +491,19 @@ body {
   text-align: center;
   padding: 3rem 1rem;
   color: #94a3b8;
+}
+
+/* --- Footer --- */
+.footer-bar {
+  background-color: #090d16;
+  border-top: 1px solid #1e293b;
+  padding: 1rem;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 0.8125rem;
+}
+
+.footer-bar span {
+  color: #38bdf8;
+  font-weight: 700;
 }
