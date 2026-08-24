@@ -300,62 +300,112 @@ pipeline {
 
     // ================================================================
     // POST ACTIONS
-    // ================================================================
-    post {
+    // ============================================================
+ post {
+    success {
+        echo 'Pipeline succeeded. Sending notification email...'
+        emailext (
+            to: 'stamilselvansk@gmail.com', // Replace with recipient email address
+            subject: "SUCCESSFUL: Job '${env.JOB_NAME}' [Build #${env.BUILD_NUMBER}]",
+            mimeType: 'text/html',
+            body: """
+                <!DOCTYPE html>
+                <html>
+                <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333333; margin: 0; padding: 20px;">
+                    <div style="max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
+                        <div style="background-color: #28a745; color: #ffffff; padding: 20px; text-align: center;">
+                            <h2 style="margin: 0; font-size: 22px;">CI/CD Pipeline Succeeded</h2>
+                        </div>
+                        <div style="padding: 20px; background-color: #ffffff;">
+                            <p style="margin-top: 0;"><strong>Job Name:</strong> ${env.JOB_NAME}</p>
+                            <p><strong>Build Number:</strong> #${env.BUILD_NUMBER}</p>
+                            <p><strong>Status:</strong> <span style="color: #28a745; font-weight: bold;">SUCCESS</span></p>
+                            
+                            <hr style="border: 0; border-top: 1px solid #eeeeee; margin: 20px 0;">
+                            
+                            <h3 style="color: #333333; margin-top: 0;">Deployment Summary</h3>
+                            <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                                <tr style="background-color: #f8f9fa;">
+                                    <td style="padding: 10px; border: 1px solid #dee2e6; font-weight: bold;">Frontend Image</td>
+                                    <td style="padding: 10px; border: 1px solid #dee2e6; font-family: monospace;">${ECR_REGISTRY}/${FRONTEND_REPO}:${BUILD_NUMBER}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px; border: 1px solid #dee2e6; font-weight: bold;">Backend Image</td>
+                                    <td style="padding: 10px; border: 1px solid #dee2e6; font-family: monospace;">${ECR_REGISTRY}/${BACKEND_REPO}:${BUILD_NUMBER}</td>
+                                </tr>
+                            </table>
+                            
+                            <p style="margin-bottom: 0;">Amazon ECS deployment finished successfully.</p>
+                        </div>
+                        <div style="background-color: #f8f9fa; padding: 15px; text-align: center; border-top: 1px solid #e0e0e0; font-size: 13px;">
+                            <a href="${env.BUILD_URL}" style="color: #007bff; text-decoration: none; font-weight: bold;">View Jenkins Console Logs</a>
+                        </div>
+                    </div>
+                </body>
+                </html>
+            """
+        )
+    }
 
-        success {
-            echo '''
-========================================
-CI/CD PIPELINE SUCCESS
-========================================
-Frontend image:
-${ECR_REGISTRY}/${FRONTEND_REPO}:${BUILD_NUMBER}
+    failure {
+        echo 'Pipeline failed. Sending notification email...'
+        emailext (
+            to: 'stamilselvansk@gmail.com', // Replace with recipient email address
+            subject: "FAILED: Job '${env.JOB_NAME}' [Build #${env.BUILD_NUMBER}]",
+            mimeType: 'text/html',
+            body: """
+                <!DOCTYPE html>
+                <html>
+                <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333333; margin: 0; padding: 20px;">
+                    <div style="max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
+                        <div style="background-color: #dc3545; color: #ffffff; padding: 20px; text-align: center;">
+                            <h2 style="margin: 0; font-size: 22px;">CI/CD Pipeline Failed</h2>
+                        </div>
+                        <div style="padding: 20px; background-color: #ffffff;">
+                            <p style="margin-top: 0;"><strong>Job Name:</strong> ${env.JOB_NAME}</p>
+                            <p><strong>Build Number:</strong> #${env.BUILD_NUMBER}</p>
+                            <p><strong>Status:</strong> <span style="color: #dc3545; font-weight: bold;">FAILED</span></p>
+                            
+                            <hr style="border: 0; border-top: 1px solid #eeeeee; margin: 20px 0;">
+                            
+                            <p>The build or deployment process encountered an error. Please inspect the console logs to identify and resolve the issue.</p>
+                        </div>
+                        <div style="background-color: #f8f9fa; padding: 15px; text-align: center; border-top: 1px solid #e0e0e0; font-size: 13px;">
+                            <a href="${env.BUILD_URL}console" style="color: #dc3545; text-decoration: none; font-weight: bold;">Open Console Output</a>
+                        </div>
+                    </div>
+                </body>
+                </html>
+            """
+        )
+    }
 
-Backend image:
-${ECR_REGISTRY}/${BACKEND_REPO}:${BUILD_NUMBER}
+    always {
+        sh '''
+            echo "Cleaning local Docker images..."
 
-ECS deployment completed successfully.
-========================================
-'''
-        }
+            docker image rm \
+                ${ECR_REGISTRY}/${FRONTEND_REPO}:${BUILD_NUMBER} \
+                2>/dev/null || true
 
-        failure {
-            echo '''
-========================================
-CI/CD PIPELINE FAILED
-========================================
-Check the Jenkins console output.
-========================================
-'''
-        }
+            docker image rm \
+                ${ECR_REGISTRY}/${BACKEND_REPO}:${BUILD_NUMBER} \
+                2>/dev/null || true
 
-        always {
-            sh '''
-                echo "Cleaning local Docker images..."
+            docker image rm \
+                employee-frontend:${BUILD_NUMBER} \
+                2>/dev/null || true
 
-                docker image rm \
-                    ${ECR_REGISTRY}/${FRONTEND_REPO}:${BUILD_NUMBER} \
-                    2>/dev/null || true
+            docker image rm \
+                employee-backend:${BUILD_NUMBER} \
+                2>/dev/null || true
 
-                docker image rm \
-                    ${ECR_REGISTRY}/${BACKEND_REPO}:${BUILD_NUMBER} \
-                    2>/dev/null || true
+            rm -f backend-task-definition.json
+            rm -f backend-task-definition-new.json
+            rm -f frontend-task-definition.json
+            rm -f frontend-task-definition-new.json
 
-                docker image rm \
-                    employee-frontend:${BUILD_NUMBER} \
-                    2>/dev/null || true
-
-                docker image rm \
-                    employee-backend:${BUILD_NUMBER} \
-                    2>/dev/null || true
-
-                rm -f backend-task-definition.json
-                rm -f backend-task-definition-new.json
-                rm -f frontend-task-definition.json
-                rm -f frontend-task-definition-new.json
-
-                echo "Cleanup completed."
-            '''
-        }
+            echo "Cleanup completed."
+        '''
     }
 }
