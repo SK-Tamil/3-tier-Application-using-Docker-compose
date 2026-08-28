@@ -60,34 +60,7 @@ Frontend Service   Backend Service
 
 The application follows a three-tier architecture.
 
-```text
-                    USER
-                     |
-                     v
-              +-------------+
-              |   Browser   |
-              +-------------+
-                     |
-                     v
-        +-------------------------+
-        | Frontend - React/Nginx  |
-        |      ECS Service        |
-        +-------------------------+
-                     |
-                     | REST API
-                     v
-        +-------------------------+
-        |   Backend - Flask      |
-        |      ECS Service       |
-        +-------------------------+
-                     |
-                     | MySQL
-                     v
-        +-------------------------+
-        |   Amazon RDS MySQL     |
-        |       Database         |
-        +-------------------------+
-```
+<img width="1536" height="1024" alt="ChatGPT Image Aug 24, 2026, 08_27_00 PM" src="https://github.com/user-attachments/assets/f222db85-22a2-4d3a-9490-054d1314361e" />
 
 ---
 
@@ -186,6 +159,9 @@ docker build -t employee-backend ./backend
 Docker Compose is used to run the multi-container application locally.
 
 The local environment contains the application services required for testing.
+
+<img width="959" height="231" alt="Screenshot 2026-08-25 205011" src="https://github.com/user-attachments/assets/06576b93-dc61-4ee2-bfdb-590b39062d26" />
+
 
 ### Start Application
 
@@ -314,6 +290,13 @@ The project uses a Jenkins Declarative Pipeline.
 | Deploy Frontend to ECS | Updates frontend ECS task definition     |
 | Notification           | Sends success/failure email              |
 | Cleanup                | Removes temporary files and local images |
+
+
+Stage Views:
+<img width="959" height="431" alt="Screenshot 2026-08-24 155649" src="https://github.com/user-attachments/assets/4d2de019-4e79-4cb4-a859-af0c1215c79f" />
+
+Overall Pipeline View:
+<img width="959" height="423" alt="Screenshot 2026-08-24 155741" src="https://github.com/user-attachments/assets/8a4179cc-d108-48ff-bd71-3ed90d12090d" />
 
 ---
 
@@ -517,6 +500,9 @@ After deployment:
 * Backend API is tested
 * Database connectivity is verified
 
+<img width="1920" height="1455" alt="screencapture-employee-management-alb-2062973517-us-east-1-elb-amazonaws-2026-08-24-15_50_30" src="https://github.com/user-attachments/assets/48279316-abe3-4cb5-8ddc-a284024feae1" />
+
+
 ---
 
 # 📊 Docker Commands
@@ -587,6 +573,9 @@ The notification contains:
 * Jenkins build URL
 * Deployment status
 
+<img width="1920" height="1054" alt="screencapture-mail-google-mail-u-0-2026-08-24-15_52_16" src="https://github.com/user-attachments/assets/93fbd617-b134-4b26-9537-53d844334123" />
+
+
 ## Failed Build
 
 The failure notification provides:
@@ -597,6 +586,9 @@ The failure notification provides:
 * Jenkins console output link
 
 This helps the DevOps team quickly identify pipeline failures.
+
+<img width="1920" height="1023" alt="screencapture-mail-google-mail-u-0-2026-08-24-15_55_12" src="https://github.com/user-attachments/assets/daa2e169-3636-453f-8deb-4b6821a4e3ce" />
+
 
 ---
 
